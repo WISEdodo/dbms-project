@@ -8,14 +8,15 @@ function Hero3() {
       <div className="hero-content">
         {/* Large text (p1) split into two lines */}
         <p className="p5">
-          Empowering Mines to <br />Achieve Carbon Neutrality.
+        Driving Sustainable Transformation <br />in the Mining Industry.
         </p>
         {/* Smaller text (p2) */}
         <p className="p6">
-          EcoMines helps coal mines track and reduce their carbon <br />
-          emissions, guiding them toward carbon neutrality through <br /> 
-          emission estimation and sustainable strategies.
-        </p>
+        
+  EcoStep helps companies <strong>track and reduce carbon emissions</strong>, <br />
+  earn rewards for eco-friendly actions, and connect with a community of changemakers.
+</p>
+
       </div>
 
       {/* Sign Up button using Link to route to /signup */}

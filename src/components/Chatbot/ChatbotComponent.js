@@ -51,6 +51,7 @@ const ChatbotComponent = () => {
             right: showFab ? "20px" : "-100px", // Move the button off-screen if `showFab` is false
             zIndex: 1000,
             transition: "right 0.5s ease", // Smooth transition effect
+            display:"none",
           }}
         />
         <div
