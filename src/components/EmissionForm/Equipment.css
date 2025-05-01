@@ -1,0 +1,6 @@
+.singlee{
+  /* background-color:white; */
+  height: 65%;
+  overflow-y: auto;
+    overflow-x: hidden;
+}

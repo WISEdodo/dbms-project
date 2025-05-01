@@ -1,0 +1,67 @@
+/* Hero Section Styles */
+.hero-section {
+  display: flex;
+  align-items: flex-start;
+  height: 89vh !important;
+  margin-top: 68px;
+  width: 100%;
+  background-position: center;
+  padding-left: 5%;
+  color: white;
+  background-color: black !important;
+  background-image: url("../../../public/backg.jpg");
+  position: relative; /* Required for positioning the signup button */
+}
+
+/* Hero content alignment */
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  margin-top: 10%;
+}
+
+/* Large Text (p1) */
+.p5 {
+  font-size: 3.6rem !important;
+  margin: 0;
+  line-height: 1.2;
+  color: white;
+}
+
+/* Smaller Text (p2) */
+.p6 {
+  font-size: 1.4rem;
+  margin-left: 1% !important;
+  margin-top: 10px;
+  color: white;
+  margin-top: 3%;
+}
+
+/* Button on bottom-right corner with z-axis */
+.signup-button {
+  position: absolute; /* Allows positioning anywhere inside the hero section */
+  bottom: 20px; /* Distance from the bottom */
+  right: 20px; /* Distance from the right */
+  padding: 15px 40px;
+  background-color: rgba(0, 0, 0, 0.2); /* Semi-transparent background */
+  color: white;
+  margin-right: 35px !important;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-family: 'Electrolize', sans-serif;
+  cursor: pointer;
+  z-index: 10; /* Higher z-index to ensure it's above other elements */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  backdrop-filter: blur(4px); /* Adds a slight blur effect */
+}
+
+.signup-button:hover {
+  background-color: white; /* Solid background color on hover */
+  color: black;
+  transform: scale(1.05); /* Slightly enlarge on hover */
+}
+
+

@@ -1,0 +1,159 @@
+
+/* Container: Split into Two Vertical Halves */
+.result-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 90%;
+  height: 90vh;
+  max-width: 1200px;
+  gap:30px;
+  padding: 20px;
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background */
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6); /* Shadow for depth */
+  margin-top: 3%;
+  margin-bottom: 10%;
+}
+
+/* Left Section: Results and Graph */
+.left-section {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.8); /* Dark background for contrast */
+  border-radius: 15px;
+  padding: 40px;
+  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow for depth */
+  color: white;
+}
+
+.congratulations-text h1 {
+  font-size: 2.5rem;
+  color: white;
+  margin-bottom: 10px;
+}
+
+.congratulations-text p {
+  font-size: 1.2rem;
+  color: #ffffffcc;
+}
+
+.total-emission-box {
+  background-color: rgba(16, 15, 15, 0.8);
+  border-radius: 10px;
+ padding: auto;
+  margin: 30px 0;
+  border: 2px solid  #28a745;
+  width: 90%;
+  text-align: center;
+}
+
+.total-emission-box h1 {
+  font-size: 1.5rem;
+  gap:1px;
+  margin-bottom: 10px;
+  font-weight: 100;
+
+}
+
+.total-emission-box p {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color:  #28a745;
+  margin-bottom: 10%;
+}
+
+.view-graph-btn {
+  background-color: white;
+  color: black;
+  margin-right: 50%;
+  padding: 12px 30px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  margin-top: 26px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.view-graph-btn:hover {
+  transform: translateY(-5px);
+  background-color: #218838;
+}
+
+/* Right Section: Recommendations */
+.right-section {
+  flex: 1;
+  background-color: rgba(29, 82, 50, 0.8); /* Green-tinted background */
+  border-radius: 15px;
+  padding: 40px;
+  margin-left: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.recommendations h2 {
+  font-size: 1.8rem;
+  color: white;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ffffff50;
+  padding-bottom: 10px;
+}
+
+.recommendations ul {
+  width: 100%;
+  height: 300px;
+  padding: 0;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 15px;
+}
+
+.recommendations li {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  transition: background-color 0.3s ease;
+}
+
+.recommendations li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.recommendations li span {
+  font-weight: bold;
+  color: #ffc700;
+}
+
+.recommendations li p {
+  font-size: 0.9em;
+  color: #ffffffa0;
+}
+
+@media screen and (max-width: 768px) {
+  .result-container {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .left-section, .right-section {
+    width: 100%;
+    margin: 0;
+    margin-bottom: 20px;
+  }
+
+  .recommendations ul {
+    height: auto;
+    padding: 10px;
+  }
+}

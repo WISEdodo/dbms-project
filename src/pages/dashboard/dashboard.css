@@ -1,0 +1,153 @@
+/* Reset for body and html */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100%;
+    background-color: #121212; /* Slightly darker background */
+    color: #e0e0e0; /* Softer light text for contrast */
+    box-sizing: border-box;
+}
+
+
+.IamYash {
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 2rem;
+}
+
+/* Header section with highlighted name */
+.unique-dashboard-header {
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem 0;
+    background-color: #1f1f1f; /* Lighter than background for separation */
+    margin-bottom: 2.5rem;
+}
+
+.unique-dashboard-header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.unique-dashboard-header h1 span {
+    color: #00c896; /* Highlighted name color */
+    font-weight: 900;
+}
+
+/* Styles for company name and email to make them bold and visible */
+.company-name, .email {
+    font-size: 1.5rem; /* Increase font size */
+    font-weight: 700;  /* Make the text bold */
+    color: #ffffff;    /* White color for good contrast */
+    margin-bottom: 1rem;
+    text-align: center; /* Center the text */
+}
+
+/* Input container */
+.unique-input-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+.company-name{
+    background-color: white !important;
+    color: black !important;
+}
+.email{
+    background-color: white !important;
+    color: black !important;
+}
+.unique-input-box {
+    flex: 1;
+    margin: 0 0.5rem;
+    padding: 0.75rem;
+    background-color: #1f1f1f; /* Dark box background for minimalism */
+    border-radius: 4px;
+    color: #e0e0e0;
+    text-align: center;
+    font-size: 1rem;
+    box-shadow: none; /* Remove shadow for cleaner look */
+    border: 1px solid #333;
+}
+
+/* Dashboard grid layout - 3 columns */
+.unique-dashboard-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* Three-column layout */
+    gap: 1.5rem;
+    width: 100%;
+}
+
+/* Box styles */
+.unique-box {
+    background-color: #1a1a1a; /* Unified minimalist background */
+    padding: 1.5rem;
+    border-radius: 8px;
+    text-align: center;
+    transition: transform 0.2s;
+    cursor: pointer;
+    border: 1px solid #333;
+}
+
+.unique-box:hover {
+    transform: translateY(-3px); /* Subtle hover effect */
+}
+
+/* Heading styles for the boxes */
+.unique-box h1 {
+    margin: 0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #e0e0e0;
+}
+
+/* Symmetrical styling for metrics */
+.unique-bo, .unique-bo2, .unique-bo3, .unique-bo4, .unique-bo6 {
+    font-size: 1.8rem;
+    margin-top: 1rem;
+    color: #00c896; /* Accent color for values */
+}
+
+/* Styles for images inside the boxes */
+.unique-img {
+    width: 50%;
+    margin: 1.5rem auto;
+}
+
+.unique-img img {
+    width: 100%;
+    border-radius: 6px;
+}
+
+/* Graph container, centered and larger */
+.unique-img-graph {
+    grid-column: span 3; /* Make the graph span all 3 columns */
+    width: 100%;
+    height: 300px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #2a2a2a;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Symmetrical box border styles */
+.unique-box1, .unique-box2, .unique-box3, .unique-box4, .unique-box5, .unique-box6 {
+    border: 1px solid #333;
+}
+
+/* Slogan or description text */
+span {
+    font-size: 1rem;
+    color: #999; /* Softer text for minimalism */
+}
