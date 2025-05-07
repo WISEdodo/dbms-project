@@ -315,7 +315,7 @@ export const fetchAndSumCarbonEmissionHistory = async () => {
 
       // Fetch all documents from carbonEmissionHistory
       const querySnapshot = await getDocs(carbonEmissionHistoryRef);
-
+      
       // Initialize variables to store the sums
       let totalCarbonEmission = 0;
       let totalMoneySaved = 0;

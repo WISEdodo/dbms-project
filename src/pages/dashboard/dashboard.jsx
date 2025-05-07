@@ -62,7 +62,7 @@ const Dashboard = () => {
   }, [fallbackUid]);
 
   return (
-    <div className="IamYash">
+    <div className="IamYash" style={{ marginTop: '100px' }}>
       <header className="unique-dashboard-header">
         <h1>Carbon Footprint Dashboard</h1>
       </header>
@@ -70,35 +70,17 @@ const Dashboard = () => {
         <div className="unique-input-box company-name">Company Name: {uniqueCompanyName}</div>
         <div className="unique-input-box email">Email ID: {uniqueEmail}</div>
       </div>
+      
       <div className="unique-dashboard-container">
         <div className="unique-box unique-box1">
           <div className="unique-h1">Monthly Carbon Emission</div>
           <p>{totalCarbonEmission} tons of CO<sub>2</sub></p>
         </div>
-        <div className="unique-box unique-box2">
-          <div className="unique-h2">Money Saved</div>
-          <p>${totalMoneySaved} saved</p>
-        </div>
-        <div className="unique-box unique-box3">
-          <div className="unique-h3">Reduce Carbon Footprint</div>
-          <div className="unique-b3">Click here</div>
-        </div>
-        <div className="unique-box unique-box4">
-          <div className="unique-h4">Marketplace</div>
-          <p>{totalCarbonCreditsEarned} carbon credits</p>
-        </div>
-        <div className="unique-box unique-box5">
-          <div className="unique-h5">Graph of Carbon Emission</div>
-          <ExpenseChart />
-        </div>
-        <div className="unique-box unique-box6">
-          <div className="unique-h6">Mentor Connect</div>
-          <div className="unique-b6">Connect</div>
-        </div>
-      </div>
+      </div> {/* Closed the unique-dashboard-container div */}
+      
       <Footer />
     </div>
   );
-};
+}
 
 export default Dashboard;
