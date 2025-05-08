@@ -39,7 +39,7 @@ function Result() {
         </div>
 
         {/* Right Section: Recommendations */}
-        <div className="right-section">
+        {/* <div className="right-section">
           <div className="recommendations">
             <h2>
               <MdOutlineVerified
@@ -58,7 +58,7 @@ function Result() {
               )}
             </ul>
           </div>
-        </div>
+        </div> */}
       </div>
       <Footer />
     </>
