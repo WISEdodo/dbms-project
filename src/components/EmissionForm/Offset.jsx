@@ -1,35 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import Nav from './Nav';
-import './Offset.css';
-import Input from './Input';
+import React, { useState, useEffect } from "react";
+import Nav from "./Nav";
+import "./Offset.css";
+import Input from "./Input";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast,Bounce } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css'; // Import the CSS
-import {totalCarbonEmission} from "../../CarbonCalculator";
+import { ToastContainer, toast, Bounce } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Import the CSS
+import { totalCarbonEmission } from "../../CarbonCalculator";
 
-const Excavation = () => {
+const Offset = () => {
   const navigate = useNavigate();
 
   // Initialize state with values from localStorage, if they exist
   const [inputValues, setInputValues] = useState({
-    afforestation: localStorage.getItem('afforestation') || '',
-    methaneCapture: localStorage.getItem('methaneCapture') || '',
-    renewableEnergy: localStorage.getItem('renewableEnergy') || '',
-    soilCarbon: localStorage.getItem('soilCarbon') || '',
-    ccs: localStorage.getItem('ccs') || '',
-    beccs: localStorage.getItem('beccs') || '',
-    carbonCredits: localStorage.getItem('carbonCredits') || '',
-    enhancedWeathering: localStorage.getItem('enhancedWeathering') || '',
-    biochar: localStorage.getItem('biochar') || '',
-    renewableDiesel: localStorage.getItem('renewableDiesel') || '',
-    avoidedDeforestation: localStorage.getItem('avoidedDeforestation') || '',
-    oceanAlkalinity: localStorage.getItem('oceanAlkalinity') || '',
-    wetlandsPeatlands: localStorage.getItem('wetlandsPeatlands') || '',
+    dietType: localStorage.getItem("dietType") || "",
+    wasteGeneration: localStorage.getItem("wasteGeneration") || "",
+    recycling: localStorage.getItem("recycling") || "",
+    composting: localStorage.getItem("composting") || "",
+    greenEnergy: localStorage.getItem("greenEnergy") || "",
   });
 
   // Save input values to localStorage whenever they change
   useEffect(() => {
-    Object.keys(inputValues).forEach(key => {
+    Object.keys(inputValues).forEach((key) => {
       localStorage.setItem(key, inputValues[key]);
     });
   }, [inputValues]);
@@ -38,13 +30,12 @@ const Excavation = () => {
   const handleInputChange = (field) => (e) => {
     setInputValues({ ...inputValues, [field]: e.target.value });
   };
- 
 
   // Handler to show toast and navigate
   const handleClick = () => {
     const finalResult = totalCarbonEmission();
-    localStorage.clear()
-    toast.success('Loading results...', {
+    localStorage.clear();
+    toast.success("Loading results...", {
       position: "bottom-center",
       autoClose: 1995,
       hideProgressBar: false,
@@ -53,9 +44,9 @@ const Excavation = () => {
       draggable: true,
       theme: "dark",
       transition: Bounce,
-      });
+    });
     setTimeout(() => {
-      navigate('/result', { state: { result: finalResult } });
+      navigate("/result", { state: { result: finalResult } });
     }, 2000);
   };
 
@@ -66,140 +57,94 @@ const Excavation = () => {
         <div className="containerr">
           <div className="electri">
             <div className="headingE">
-              {/* Add heading if needed */}
+              <h3>Diet</h3>
             </div>
             <div className="inputo">
               <Input
-                title="Afforestation/Reforestation"
-                value={inputValues.afforestation}
-                onChange={handleInputChange('afforestation')}
-                units="hectare"
-              />
-            
-              <Input
-                title="Methane Capture"
-                value={inputValues.methaneCapture}
-                onChange={handleInputChange('methaneCapture')}
-                units="cc"
-              />
-              <Input
-                title="Renewable Energy"
-                value={inputValues.renewableEnergy}
-                onChange={handleInputChange('renewableEnergy')}
-                units="MWh"
+                title="Diet Type (e.g., Omnivore, Vegetarian, Vegan)"
+                value={inputValues.dietType}
+                onChange={handleInputChange("dietType")}
+                units=""
               />
             </div>
           </div>
           <div className="electri">
             <div className="headingE">
-              {/* Add heading if needed */}
+              <h3>Waste Generation</h3>
             </div>
             <div className="inputE">
               <Input
-                title="Soil Carbon Sequestration"
-                value={inputValues.soilCarbon}
-                onChange={handleInputChange('soilCarbon')}
-                units="hectare"
-              />
-              <Input
-                title="CCS"
-                value={inputValues.ccs}
-                onChange={handleInputChange('ccs')}
-                units="metric tons"
-              />
-              <Input
-                title="BECCS"
-                value={inputValues.beccs}
-                onChange={handleInputChange('beccs')}
-                units="MWh"
+                title="Waste Generated [kg/week]"
+                value={inputValues.wasteGeneration}
+                onChange={handleInputChange("wasteGeneration")}
+                units="kg"
               />
             </div>
           </div>
           <div className="electri">
             <div className="headingE">
-              {/* Add heading if needed */}
+              <h3>Recycling</h3>
             </div>
             <div className="inputE">
               <Input
-                title="Carbon Credits"
-                value={inputValues.carbonCredits}
-                onChange={handleInputChange('carbonCredits')}
-                units="metric tons"
-              />
-              <Input
-                title="Enhanced Weathering"
-                value={inputValues.enhancedWeathering}
-                onChange={handleInputChange('enhancedWeathering')}
-                units="metric tons"
-              />
-              <Input
-                title="Biochar"
-                value={inputValues.biochar}
-                onChange={handleInputChange('biochar')}
-                units="metric tons"
+                title="Do you recycle? (Yes/No)"
+                value={inputValues.recycling}
+                onChange={handleInputChange("recycling")}
+                units=""
               />
             </div>
           </div>
           <div className="electri">
             <div className="headingE">
-              {/* Add heading if needed */}
+              <h3>Composting</h3>
             </div>
             <div className="inputE">
               <Input
-                title="Renewable Diesel"
-                value={inputValues.renewableDiesel}
-                onChange={handleInputChange('renewableDiesel')}
-                units="metric tons"
-              />
-              <Input
-                title="Avoided Deforestation"
-                value={inputValues.avoidedDeforestation}
-                onChange={handleInputChange('avoidedDeforestation')}
-                units="hectare"
-              />
-              <Input
-                title="Ocean Alkalinity"
-                value={inputValues.oceanAlkalinity}
-                onChange={handleInputChange('oceanAlkalinity')}
-                units="hectare"
+                title="Do you compost? (Yes/No)"
+                value={inputValues.composting}
+                onChange={handleInputChange("composting")}
+                units=""
               />
             </div>
           </div>
           <div className="electri">
             <div className="headingE">
-              {/* Add heading if needed */}
+              <h3>Green Energy Subscription</h3>
             </div>
             <div className="inputE">
               <Input
-                title="Wetlands/Peatlands"
-                value={inputValues.wetlandsPeatlands}
-                onChange={handleInputChange('wetlandsPeatlands')}
-                units="hectare"
+                title="Do you use green/renewable energy at home? (Yes/No)"
+                value={inputValues.greenEnergy}
+                onChange={handleInputChange("greenEnergy")}
+                units=""
               />
             </div>
           </div>
         </div>
         <div className="footerr">
-          
-          <button onClick={handleClick} className='btn4' >RESULT</button>
-          <button onClick={() => navigate(-1)} className='btn'>Prev</button>
+          <button onClick={handleClick} className="btn4">
+            RESULT
+          </button>
+          <button onClick={() => navigate(-1)} className="btn">
+            Prev
+          </button>
         </div>
       </div>
       <ToastContainer
-  position="bottom-center"
-  autoClose={1995}
-  hideProgressBar={false}
-  newestOnTop={false}
-  closeOnClick
-  rtl={false}
-  pauseOnFocusLoss
-  draggable
-  pauseOnHover
-  theme="dark"
-  transition={Bounce} // Correct prop format
-/>
+        position="bottom-center"
+        autoClose={1995}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce} // Correct prop format
+      />
     </>
   );
-}
+};
 
-export default Excavation;
+export default Offset;

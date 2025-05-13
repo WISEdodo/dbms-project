@@ -2,19 +2,31 @@ import React, { useState, useEffect } from "react";
 import styles from "./SingleEquipment.module.css"; // Importing the CSS module
 import { ImBin2 } from "react-icons/im";
 
-const SingleEquipment = ({ text = "Equipment Details" }) => {
+const SingleEquipment = ({ text = "Appliance Details" }) => {
   const defaultEquipment = {
     powerSource: "electric",
     appliances: 0,
     load: 0,
     usage: 0,
     emissions: 0,
+    applianceType: "TV",
   };
 
   const [equipmentList, setEquipmentList] = useState(
     () =>
       JSON.parse(localStorage.getItem("equipmentList")) || [defaultEquipment]
   );
+
+  const applianceOptions = [
+    "TV",
+    "Refrigerator",
+    "Washing Machine",
+    "Computer",
+    "Microwave",
+    "Fan",
+    "Air Conditioner",
+    "Other",
+  ];
 
   const calculateEmissions = (equipment) => {
     const emissionFactor = equipment.powerSource === "electric" ? 0.03 : 0.25;
@@ -51,12 +63,32 @@ const SingleEquipment = ({ text = "Equipment Details" }) => {
       {equipmentList.map((equipment, index) => (
         <div key={index} className={styles.outerContainer}>
           <div className={styles.textAbove}>{text}</div>
-
           <div className={styles.formSection}>
             <div className={styles.leftyy}>
               <div className={styles.inputGroup}>
+                <label>Appliance Type</label>
+                <select
+                  className={styles.ip}
+                  value={equipment.applianceType}
+                  onChange={(e) =>
+                    handleUpdateEquipment(
+                      index,
+                      "applianceType",
+                      e.target.value
+                    )
+                  }
+                >
+                  {applianceOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className={styles.inputGroup}>
                 <label>Approx. Load (Watts)</label>
-                <input className={styles.ip}
+                <input
+                  className={styles.ip}
                   type="number"
                   value={equipment.load}
                   onChange={(e) =>
@@ -70,7 +102,8 @@ const SingleEquipment = ({ text = "Equipment Details" }) => {
               </div>
               <div className={styles.equipmentInputGroup}>
                 <label>No. of Appliances</label>
-                <input className={styles.ip}
+                <input
+                  className={styles.ip}
                   type="number"
                   value={equipment.appliances}
                   onChange={(e) =>
@@ -84,7 +117,8 @@ const SingleEquipment = ({ text = "Equipment Details" }) => {
               </div>
               <div className={styles.equipmentInputGroup}>
                 <label>Avg. Usage (hrs/day)</label>
-                <input className={styles.ip}
+                <input
+                  className={styles.ip}
                   type="number"
                   value={equipment.usage}
                   onChange={(e) =>
@@ -98,22 +132,25 @@ const SingleEquipment = ({ text = "Equipment Details" }) => {
               </div>
               <div className={styles.inputGroup}>
                 <label>Emissions (Kg CO2)</label>
-                <input className={styles.ip} type="text" value={equipment.emissions} readOnly />
+                <input
+                  className={styles.ip}
+                  type="text"
+                  value={equipment.emissions}
+                  readOnly
+                />
               </div>
-
-
               <button
-              onClick={() => handleDeleteEquipment(index)}
-              className={styles.btnDeleteEquipment}
-            >
-            <ImBin2   style={{
+                onClick={() => handleDeleteEquipment(index)}
+                className={styles.btnDeleteEquipment}
+              >
+                <ImBin2
+                  style={{
                     color: "white",
                     alignItems: "center",
                     fontSize: "150%",
-                  }}/>
-            </button>
-
-
+                  }}
+                />
+              </button>
             </div>
             <div className={styles.righty}>
               <div className={styles.powerSourceToggle}>
@@ -151,19 +188,16 @@ const SingleEquipment = ({ text = "Equipment Details" }) => {
                   </label>
                 </div>
               </div>
-              
             </div>
-
-            
           </div>
-          <button onClick={handleAddEquipment} className={styles.btnAddEquipment}>
-        Add Equipment
-      </button>
+          <button
+            onClick={handleAddEquipment}
+            className={styles.btnAddEquipment}
+          >
+            Add Appliance
+          </button>
         </div>
-       
       ))}
-
-      
     </div>
   );
 };

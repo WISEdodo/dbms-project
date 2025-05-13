@@ -1,30 +1,42 @@
-import React from 'react';
-import styles from './Dropdown.module.css'; // Import CSS module
+import React from "react";
+import styles from "./Dropdown.module.css"; // Import CSS module
 
-const Dropdown = ({ value, onChange }) => {
-    return (
-        <div>
-            <label htmlFor="fuelType" className={styles.label}>Fuel Type*</label>
-            <select
-                id="fuelType"
-                className={styles.selectInput}  // Apply the CSS module class
-                value={value}
-                onChange={onChange}
-            >
-                <option value="" disabled>Select Fuel Type</option>
-                <option value="anthracite">Anthracite</option>
-                <option value="bituminous">Bituminous</option>
-                <option value="lignite">Lignite</option>
-                <option value="subbituminous">Subbituminous</option>
-                <option value="diesel">Diesel</option>
-                <option value="Fuel Oil">Fuel Oil</option>
-                <option value="LPG">LPG</option>
-                <option value="Pet Coke">Pet Coke</option>
-                <option value="Rice Husk">Rice Husk</option>
-                <option value="Wood">Wood</option>
-            </select>
-        </div>
-    );
+const Dropdown = ({ value, onChange, options }) => {
+  const defaultOptions = [
+    "anthracite",
+    "bituminous",
+    "lignite",
+    "subbituminous",
+    "diesel",
+    "Fuel Oil",
+    "LPG",
+    "Pet Coke",
+    "Rice Husk",
+    "Wood",
+  ];
+  const opts = options || defaultOptions;
+  return (
+    <div>
+      <label htmlFor="fuelType" className={styles.label}>
+        Fuel Type*
+      </label>
+      <select
+        id="fuelType"
+        className={styles.selectInput} // Apply the CSS module class
+        value={value}
+        onChange={onChange}
+      >
+        <option value="" disabled>
+          Select Fuel Type
+        </option>
+        {opts.map((opt) => (
+          <option key={opt} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
 };
 
 export default Dropdown;

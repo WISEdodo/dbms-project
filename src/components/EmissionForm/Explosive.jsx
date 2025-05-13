@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Explosive.module.css"; // Import the CSS module
 // import ExplosiveDropdown from "./ExplosiveDropdown";
-import ExplosiveDropdown from "./ExplosiveDropdown ";
+import ExplosiveDropdown from "./ExplosiveDropdown";
 import { ImBin2 } from "react-icons/im";
 import { getEmissionFactor } from "../../CarbonCalculator";
 
@@ -13,12 +13,13 @@ const Explosive = ({ text = "" }) => {
   };
 
   const [explosiveList, setExplosiveList] = useState(
-    () => JSON.parse(localStorage.getItem("explosiveList")) || [defaultExplosive]
+    () =>
+      JSON.parse(localStorage.getItem("explosiveList")) || [defaultExplosive]
   );
 
   const calculateEmissions = (explosive) => {
     let emissionFactor = 1;
-    emissionFactor = getEmissionFactor(explosive.explosiveType)
+    emissionFactor = getEmissionFactor(explosive.explosiveType);
     if (explosive.explosiveType === "Black Powder") emissionFactor = 2;
     console.log("Calculating emissions for:", explosive); // Debugging line
     const calculatedEmissions = explosive.numberOfExplosives * emissionFactor;
@@ -85,20 +86,34 @@ const Explosive = ({ text = "" }) => {
 
               <div className={styles["input-group"]}>
                 <label>Emissions (Kg CO2)</label>
-                <input className={styles.ip} type="text" value={explosive.emissions} readOnly />
+                <input
+                  className={styles.ip}
+                  type="text"
+                  value={explosive.emissions}
+                  readOnly
+                />
               </div>
 
               <button
                 onClick={() => handleDeleteExplosive(index)}
                 className={styles["btn-delete-explosive"]}
               >
-                <ImBin2 style={{ color: "white", alignItems: "center", fontSize: "150%" }} />
+                <ImBin2
+                  style={{
+                    color: "white",
+                    alignItems: "center",
+                    fontSize: "150%",
+                  }}
+                />
               </button>
             </div>
           </div>
         ))}
 
-        <button onClick={handleAddExplosive} className={styles["btn-add-explosive"]}>
+        <button
+          onClick={handleAddExplosive}
+          className={styles["btn-add-explosive"]}
+        >
           Add Explosive +
         </button>
       </div>
