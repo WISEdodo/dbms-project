@@ -56,6 +56,26 @@ const Transportation = () => {
     }
   }, [selectedFuel, inputValues.fuelUnit]);
 
+  // Update public transport emission only when relevant fields change
+  useEffect(() => {
+    if (inputValues.electricityUnit) {
+      const newElectricEmission = CarbonEmissionFromElectricity(
+        parseFloat(inputValues.electricityUnit) || 0
+      );
+      setInputValues((prev) => ({
+        ...prev,
+        electricityEmissions: newElectricEmission,
+      }));
+      localStorage.setItem("electricityEmissions", newElectricEmission);
+    } else {
+      setInputValues((prev) => ({
+        ...prev,
+        electricityEmissions: "",
+      }));
+      localStorage.setItem("electricityEmissions", "");
+    }
+  }, [inputValues.electricityUnit]);
+
   // Handler to update state
   const handleInputChange = (field) => (e) => {
     setInputValues({ ...inputValues, [field]: e.target.value });

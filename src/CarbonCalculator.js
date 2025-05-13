@@ -35,6 +35,24 @@ var offsets = [
 
 export function CarbonEmissionFromFuel(fuelType, fuelConsumed) {
   switch (fuelType) {
+    case "Natural Gas":
+      return fuelConsumed * 2.75; // kg CO2 per kg
+    case "Heating Oil":
+      return fuelConsumed * 3.15; // kg CO2 per liter
+    case "LPG":
+      return fuelConsumed * 2.95;
+    case "Other":
+      return 0; // Or set a default value if you want
+    case "diesel":
+    case "Diesel":
+      return fuelConsumed * 2.73;
+    case "petrol":
+    case "Petrol":
+      return fuelConsumed * 2.31;
+    case "CNG":
+      return fuelConsumed * 2.75;
+    case "Electric":
+      return 0;
     case "anthracite":
       return fuelConsumed * 2.87;
     case "bituminous":
@@ -43,20 +61,8 @@ export function CarbonEmissionFromFuel(fuelType, fuelConsumed) {
       return fuelConsumed * 1.53;
     case "subbituminous":
       return fuelConsumed * 1.85;
-    case "diesel":
-    case "Diesel":
-      return fuelConsumed * 2.73;
-    case "petrol":
-    case "Petrol":
-      return fuelConsumed * 2.31; // Example value for petrol
-    case "CNG":
-      return fuelConsumed * 2.75; // Example value for CNG
-    case "Electric":
-      return 0; // Use electricity calculation elsewhere if needed
     case "Fuel Oil":
       return fuelConsumed * 2.9;
-    case "LPG":
-      return fuelConsumed * 2.95;
     case "Pet Coke":
       return fuelConsumed * 3.39;
     case "Rice Husk":
