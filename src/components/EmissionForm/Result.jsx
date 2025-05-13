@@ -31,7 +31,6 @@ function Result() {
             <h1>Your Current Total</h1>
             <p>{result ? `${result} tons` : "Not available"}</p>
           </div>
-          >
         </div>
 
         {/* Right Section: Recommendations */}
