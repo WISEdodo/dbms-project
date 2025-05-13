@@ -17,9 +17,9 @@
 //     CarbonEmissionFromMining(eletricityConsumedForMiningEquip, "electric");
 //   FinalCarbonEmission += methaneEmission(methaneEmission, 25);
 // }
-import { auth, db } from "./firebase";
+import { db } from "./firebase";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc,collection,getDocs  } from "firebase/firestore";
+import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 
 var offsets = [
   "afforestation",
@@ -31,7 +31,7 @@ var offsets = [
   "biochar",
   "renewableDiesel",
   "wetlandsPeatlands",
-]
+];
 
 export function CarbonEmissionFromFuel(fuelType, fuelConsumed) {
   switch (fuelType) {
@@ -44,9 +44,15 @@ export function CarbonEmissionFromFuel(fuelType, fuelConsumed) {
     case "subbituminous":
       return fuelConsumed * 1.85;
     case "diesel":
+    case "Diesel":
       return fuelConsumed * 2.73;
-    case "subbituminous":
-      return fuelConsumed * 1.85;
+    case "petrol":
+    case "Petrol":
+      return fuelConsumed * 2.31; // Example value for petrol
+    case "CNG":
+      return fuelConsumed * 2.75; // Example value for CNG
+    case "Electric":
+      return 0; // Use electricity calculation elsewhere if needed
     case "Fuel Oil":
       return fuelConsumed * 2.9;
     case "LPG":
@@ -107,18 +113,22 @@ export function getUnit(offset) {
 
 export function distributeValue(value, n) {
   if (n <= 0) {
-      throw new Error('Number of parts must be greater than 0');
+    throw new Error("Number of parts must be greater than 0");
   }
   if (n === 1) {
-      return [value];
+    return [value];
   }
 
   // Generate n-1 random split points
-  const splits = Array.from({ length: n - 1 }, () => Math.random()).sort((a, b) => a - b);
+  const splits = Array.from({ length: n - 1 }, () => Math.random()).sort(
+    (a, b) => a - b
+  );
 
   // Calculate the differences between split points
-  const parts = splits.map((split, index) => (split - (splits[index - 1] || 0)) * value);
-  
+  const parts = splits.map(
+    (split, index) => (split - (splits[index - 1] || 0)) * value
+  );
+
   // Add the final part
   parts.push((1 - splits[splits.length - 1]) * value);
 
@@ -126,18 +136,17 @@ export function distributeValue(value, n) {
 }
 
 export function giveRecommendation(carbonEmission) {
-const parts = distributeValue(carbonEmission, 9);
-return offsets.map((offset, index) => {
-  const part = parts[index];
-  const factor = getCarbonMultiplier(offset);
-  return `Reduce carbon footprint by doing ${(part.toFixed(2) / factor.toFixed(2)).toFixed(2)} ${getUnit(offset)} of ${offset}.`;
-});
+  const parts = distributeValue(carbonEmission, 9);
+  return offsets.map((offset, index) => {
+    const part = parts[index];
+    const factor = getCarbonMultiplier(offset);
+    return `Reduce carbon footprint by doing ${(
+      part.toFixed(2) / factor.toFixed(2)
+    ).toFixed(2)} ${getUnit(offset)} of ${offset}.`;
+  });
 }
 export function CarbonEmissionFromElectricity(units) {
   return (units * 1.0035).toFixed(2);
-}
-function CarbonEmissionFromElectricEquip(load, amount, avgUse) {
-  return load * amount * avgUse * 0.031;
 }
 export function getEmissionFactor(explosiveType) {
   // Log the explosive type to verify what is passed
@@ -148,27 +157,26 @@ export function getEmissionFactor(explosiveType) {
 
   switch (trimmedType) {
     case "Dynamite (Nitroglycerin-based)":
-      return 0.230; // kg CO2 per kg of dynamite
+      return 0.23; // kg CO2 per kg of dynamite
     case "Ammonium Nitrate Fuel Oil (ANFO)":
-      return 0.160; // kg CO2 per kg of ANFO
+      return 0.16; // kg CO2 per kg of ANFO
     case "Emulsion Explosives":
-      return 0.170; // kg CO2 per kg of emulsion explosives
+      return 0.17; // kg CO2 per kg of emulsion explosives
     case "Water-gel Explosives (Slurries)":
-      return 0.150; // kg CO2 per kg of water-gel explosives
+      return 0.15; // kg CO2 per kg of water-gel explosives
     case "Pentolite":
-      return 0.240; // kg CO2 per kg of pentolite
+      return 0.24; // kg CO2 per kg of pentolite
     case "TNT (Trinitrotoluene)":
-      return 0.250; // kg CO2 per kg of TNT
+      return 0.25; // kg CO2 per kg of TNT
     case "PETN (Pentaerythritol Tetranitrate)":
-      return 0.210; // kg CO2 per kg of PETN
+      return 0.21; // kg CO2 per kg of PETN
     case "Black Powder":
-      return 0.300; // kg CO2 per kg of black powder
+      return 0.3; // kg CO2 per kg of black powder
     default:
       console.log("Explosive type not found, returning default value");
       return 1; // default if explosive type is not recognized
   }
 }
-
 
 function getCarbonMultiplier(activity) {
   switch (activity) {
@@ -248,46 +256,61 @@ export function totalCarbonEmission() {
 
   // Check if the equipmentList exists and parse it
   const equipmentList = equipmentListJSON ? JSON.parse(equipmentListJSON) : [];
-   // Iterate over the equipmentList array
-   equipmentList.forEach((equipment) => {
+  // Iterate over the equipmentList array
+  equipmentList.forEach((equipment) => {
     var emissionString = equipment.emissions;
-    if (emissionString[0] == ".") emissionString = "0" + emissionString;
+    if (emissionString[0] === ".") emissionString = "0" + emissionString;
     var value = parseFloat(emissionString);
     totalEmission += value;
   });
-  totalEmission/=1000;
+  totalEmission /= 1000;
   // Subtract all offsets from the total emission
   totalEmission -= offsets.reduce((acc, val) => acc + val, 0);
- 
 
- 
   totalEmission = totalEmission.toFixed(5);
   // Optional: return or log the final total emission
   console.log("Total Carbon Emission:", totalEmission);
-  addCarbonEmissionHistory(totalEmission,0,0);
+  addCarbonEmissionHistory(totalEmission, 0, 0);
   return totalEmission;
 }
 
-const addCarbonEmissionHistory = async (carbonEmission, moneySaved, carbonCreditsEarned) => {
+const addCarbonEmissionHistory = async (
+  carbonEmission,
+  moneySaved,
+  carbonCreditsEarned
+) => {
   try {
     // Get the currently authenticated user
     const auth = getAuth();
     const user = auth.currentUser;
-    
+
     if (user) {
       // Get user's UID
       const userId = user.uid;
-      
+
       // Prepare carbon emission history data
       const historyData = {
         carbonEmission,
         moneySaved,
         carbonCreditsEarned,
-        createdAt: new Date(),  // Timestamp
+        createdAt: new Date(), // Timestamp
+        // User-centric fields
+        dietType: localStorage.getItem("dietType") || "",
+        wasteGeneration: localStorage.getItem("wasteGeneration") || "",
+        recycling: localStorage.getItem("recycling") || "",
+        composting: localStorage.getItem("composting") || "",
+        greenEnergy: localStorage.getItem("greenEnergy") || "",
+        // Add more fields as needed
       };
-      
+
       // Reference to the specific document in the 'carbonEmissionHistory' collection
-      const userRef = doc(db, 'users', userId, 'carbonEmissionHistory', 'latestRecord');
+      const userRef = doc(
+        db,
+        "users",
+        userId,
+        "carbonEmissionHistory",
+        "latestRecord"
+      );
 
       // Set the document (overwrites if it exists, or creates if it doesn't)
       await setDoc(userRef, historyData);
@@ -311,11 +334,16 @@ export const fetchAndSumCarbonEmissionHistory = async () => {
       const userId = user.uid;
 
       // Reference to the user's carbonEmissionHistory collection
-      const carbonEmissionHistoryRef = collection(db, 'users', userId, 'carbonEmissionHistory');
+      const carbonEmissionHistoryRef = collection(
+        db,
+        "users",
+        userId,
+        "carbonEmissionHistory"
+      );
 
       // Fetch all documents from carbonEmissionHistory
       const querySnapshot = await getDocs(carbonEmissionHistoryRef);
-      
+
       // Initialize variables to store the sums
       let totalCarbonEmission = 0;
       let totalMoneySaved = 0;
@@ -333,23 +361,24 @@ export const fetchAndSumCarbonEmissionHistory = async () => {
       return {
         totalCarbonEmission,
         totalMoneySaved,
-        totalCarbonCreditsEarned
+        totalCarbonCreditsEarned,
       };
     } else {
-      console.log('No authenticated user found.');
+      console.log("No authenticated user found.");
     }
   } catch (error) {
-    console.error('Error fetching carbon emission history:', error);
+    console.error("Error fetching carbon emission history:", error);
   }
 };
 
 // Destructure the returned object into separate variables
 export const getSummedValues = async () => {
-  const { totalCarbonEmission, totalMoneySaved, totalCarbonCreditsEarned } = await fetchAndSumCarbonEmissionHistory();
+  const { totalCarbonEmission, totalMoneySaved, totalCarbonCreditsEarned } =
+    await fetchAndSumCarbonEmissionHistory();
 
-  console.log('Carbon Emission:', totalCarbonEmission);
-  console.log('Money Saved:', totalMoneySaved);
-  console.log('Carbon Credits Earned:', totalCarbonCreditsEarned);
+  console.log("Carbon Emission:", totalCarbonEmission);
+  console.log("Money Saved:", totalMoneySaved);
+  console.log("Carbon Credits Earned:", totalCarbonCreditsEarned);
 
   // You can now use the three separate variables as needed
 };

@@ -25,26 +25,36 @@ const Transportation = () => {
     localStorage.getItem("selectedFuel") || ""
   );
 
-  // Save input values and selectedFuel to localStorage whenever they change
+  // Save input values to localStorage whenever they change (except emissions)
   useEffect(() => {
     Object.keys(inputValues).forEach((key) => {
-      localStorage.setItem(key, inputValues[key]);
+      if (key !== "fuelEmissions" && key !== "electricityEmissions") {
+        localStorage.setItem(key, inputValues[key]);
+      }
     });
-
     localStorage.setItem("selectedFuel", selectedFuel);
-    var newElectricEmission = CarbonEmissionFromElectricity(
-      inputValues.electricityUnit
-    );
-    var newFuelEmission = CarbonEmissionFromFuel(
-      selectedFuel,
-      inputValues.fuelUnit
-    );
-    setInputValues((prevValues) => ({
-      ...prevValues,
-      fuelEmissions: newFuelEmission,
-      electricityEmissions: newElectricEmission,
-    }));
   }, [inputValues, selectedFuel]);
+
+  // Update car travel emission only when relevant fields change
+  useEffect(() => {
+    if (selectedFuel && inputValues.fuelUnit) {
+      const newFuelEmission = CarbonEmissionFromFuel(
+        selectedFuel,
+        parseFloat(inputValues.fuelUnit) || 0
+      );
+      setInputValues((prev) => ({
+        ...prev,
+        fuelEmissions: newFuelEmission,
+      }));
+      localStorage.setItem("fuelEmissions", newFuelEmission);
+    } else {
+      setInputValues((prev) => ({
+        ...prev,
+        fuelEmissions: "",
+      }));
+      localStorage.setItem("fuelEmissions", "");
+    }
+  }, [selectedFuel, inputValues.fuelUnit]);
 
   // Handler to update state
   const handleInputChange = (field) => (e) => {
