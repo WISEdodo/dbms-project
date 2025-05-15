@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./SingleEquipment.module.css"; // Importing the CSS module
 import { ImBin2 } from "react-icons/im";
 
+// SingleEquipment component for managing a list of appliances and their emissions
 const SingleEquipment = ({ text = "Appliance Details" }) => {
+  // Default equipment object structure
   const defaultEquipment = {
     powerSource: "electric",
     appliances: 0,
@@ -12,11 +14,13 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
     applianceType: "TV",
   };
 
+  // State to store the list of equipment, initialized from localStorage if available
   const [equipmentList, setEquipmentList] = useState(
     () =>
       JSON.parse(localStorage.getItem("equipmentList")) || [defaultEquipment]
   );
 
+  // List of appliance types for the dropdown
   const applianceOptions = [
     "TV",
     "Refrigerator",
@@ -28,6 +32,8 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
     "Other",
   ];
 
+  // Function to calculate emissions for a single equipment item
+  // Uses different emission factors for electric and diesel
   const calculateEmissions = (equipment) => {
     const emissionFactor = equipment.powerSource === "electric" ? 0.03 : 0.25;
     const calculatedEmissions =
@@ -35,36 +41,44 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
     return calculatedEmissions.toFixed(2);
   };
 
+  // Effect to save equipment list to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("equipmentList", JSON.stringify(equipmentList));
   }, [equipmentList]);
 
+  // Handler to add a new equipment entry
   const handleAddEquipment = () => {
     setEquipmentList([...equipmentList, defaultEquipment]);
   };
 
+  // Handler to delete an equipment entry by index
   const handleDeleteEquipment = (index) => {
     const updatedList = equipmentList.filter((_, i) => i !== index);
     setEquipmentList(updatedList);
   };
 
+  // Handler to update a field of an equipment entry
   const handleUpdateEquipment = (index, field, value) => {
     const updatedList = [...equipmentList];
     updatedList[index] = {
       ...updatedList[index],
       [field]: value,
     };
+    // Recalculate emissions whenever a field changes
     updatedList[index].emissions = calculateEmissions(updatedList[index]);
     setEquipmentList(updatedList);
   };
 
+  // Render the list of equipment forms
   return (
     <div>
       {equipmentList.map((equipment, index) => (
         <div key={index} className={styles.outerContainer}>
+          {/* Display the section title */}
           <div className={styles.textAbove}>{text}</div>
           <div className={styles.formSection}>
             <div className={styles.leftyy}>
+              {/* Dropdown for appliance type */}
               <div className={styles.inputGroup}>
                 <label>Appliance Type</label>
                 <select
@@ -85,6 +99,7 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
                   ))}
                 </select>
               </div>
+              {/* Input for load in watts */}
               <div className={styles.inputGroup}>
                 <label>Approx. Load (Watts)</label>
                 <input
@@ -100,6 +115,7 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
                   }
                 />
               </div>
+              {/* Input for number of appliances */}
               <div className={styles.equipmentInputGroup}>
                 <label>No. of Appliances</label>
                 <input
@@ -115,6 +131,7 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
                   }
                 />
               </div>
+              {/* Input for average usage in hours per day */}
               <div className={styles.equipmentInputGroup}>
                 <label>Avg. Usage (hrs/day)</label>
                 <input
@@ -130,6 +147,7 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
                   }
                 />
               </div>
+              {/* Display calculated emissions (read-only) */}
               <div className={styles.inputGroup}>
                 <label>Emissions (Kg CO2)</label>
                 <input
@@ -139,6 +157,7 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
                   readOnly
                 />
               </div>
+              {/* Button to delete this equipment entry */}
               <button
                 onClick={() => handleDeleteEquipment(index)}
                 className={styles.btnDeleteEquipment}
@@ -153,6 +172,7 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
               </button>
             </div>
             <div className={styles.righty}>
+              {/* Toggle for power source (electric or diesel) */}
               <div className={styles.powerSourceToggle}>
                 <label className={styles.toggleLabel}>Power Source:</label>
                 <div className={styles.toggleOptions}>
@@ -190,6 +210,7 @@ const SingleEquipment = ({ text = "Appliance Details" }) => {
               </div>
             </div>
           </div>
+          {/* Button to add a new appliance entry */}
           <button
             onClick={handleAddEquipment}
             className={styles.btnAddEquipment}

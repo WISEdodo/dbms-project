@@ -75,7 +75,7 @@ const Dashboard = () => {
   }, [fallbackUid]);
 
   return (
-    <div className="IamYash" style={{ paddingTop: "3rem" }}>
+    <div className="IamYash" style={{ paddingTop: "9rem" }}>
       <header className="unique-dashboard-header">
         <h1>Carbon Footprint Dashboard</h1>
       </header>
@@ -114,9 +114,17 @@ const Dashboard = () => {
               </p>
             </div>
 
-            <div className="unique-box unique-box3">
-              <div className="unique-h3">Reduce Carbon Footprint</div>
-              <div className="unique-b3">Click here</div>
+            {/* New Suggestions Box */}
+            <div className="unique-box unique-box-suggestions">
+              <div className="unique-h3">
+                Suggestions to Reduce Your Footprint
+              </div>
+              <ul>
+                {/* Suggestions will be dynamically inserted here */}
+                <li>Consider using public transport more often.</li>
+                <li>Explore plant-based meal options.</li>
+                <li>Improve home insulation to save energy.</li>
+              </ul>
             </div>
           </div>
         </>

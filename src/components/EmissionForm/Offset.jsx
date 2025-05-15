@@ -10,7 +10,7 @@ import { totalCarbonEmission } from "../../CarbonCalculator";
 const Offset = () => {
   const navigate = useNavigate();
 
-  // Initialize state with values from localStorage, if they exist
+  // State to store input values, initialized from localStorage if available
   const [inputValues, setInputValues] = useState({
     dietType: localStorage.getItem("dietType") || "",
     wasteGeneration: localStorage.getItem("wasteGeneration") || "",
@@ -19,19 +19,20 @@ const Offset = () => {
     greenEnergy: localStorage.getItem("greenEnergy") || "",
   });
 
-  // Save input values to localStorage whenever they change
+  // Effect to save input values to localStorage whenever they change
   useEffect(() => {
     Object.keys(inputValues).forEach((key) => {
       localStorage.setItem(key, inputValues[key]);
     });
   }, [inputValues]);
 
-  // Handler to update state
+  // Handler to update a specific field in inputValues
   const handleInputChange = (field) => (e) => {
     setInputValues({ ...inputValues, [field]: e.target.value });
   };
 
-  // Handler to show toast and navigate
+  // Handler for the RESULT button
+  // Calculates total carbon emission, clears localStorage, shows a toast, and navigates to the result page
   const handleClick = () => {
     const finalResult = totalCarbonEmission();
     localStorage.clear();
@@ -52,9 +53,11 @@ const Offset = () => {
 
   return (
     <>
+      {/* Navigation bar at the top */}
       <Nav />
       <div className="box">
         <div className="containerr">
+          {/* Diet input section */}
           <div className="electri">
             <div className="headingE">
               <h3>Diet</h3>
@@ -68,6 +71,7 @@ const Offset = () => {
               />
             </div>
           </div>
+          {/* Waste Generation input section */}
           <div className="electri">
             <div className="headingE">
               <h3>Waste Generation</h3>
@@ -81,6 +85,7 @@ const Offset = () => {
               />
             </div>
           </div>
+          {/* Recycling input section */}
           <div className="electri">
             <div className="headingE">
               <h3>Recycling</h3>
@@ -94,6 +99,7 @@ const Offset = () => {
               />
             </div>
           </div>
+          {/* Composting input section */}
           <div className="electri">
             <div className="headingE">
               <h3>Composting</h3>
@@ -107,6 +113,7 @@ const Offset = () => {
               />
             </div>
           </div>
+          {/* Green Energy input section */}
           <div className="electri">
             <div className="headingE">
               <h3>Green Energy Subscription</h3>
@@ -121,15 +128,19 @@ const Offset = () => {
             </div>
           </div>
         </div>
+        {/* Footer with navigation buttons */}
         <div className="footerr">
+          {/* Button to calculate and show result */}
           <button onClick={handleClick} className="btn4">
             RESULT
           </button>
+          {/* Button to go to previous page */}
           <button onClick={() => navigate(-1)} className="btn">
             Prev
           </button>
         </div>
       </div>
+      {/* Toast notification container for feedback */}
       <ToastContainer
         position="bottom-center"
         autoClose={1995}

@@ -21,6 +21,7 @@ import { db } from "./firebase";
 import { getAuth } from "firebase/auth";
 import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 
+// List of supported carbon offset activities used for recommendations and calculations
 var offsets = [
   "afforestation",
   "methaneCapture",
@@ -33,6 +34,8 @@ var offsets = [
   "wetlandsPeatlands",
 ];
 
+// Calculates carbon emissions based on the type and amount of fuel consumed.
+// Each fuel type has a specific emission factor (kg CO2 per unit).
 export function CarbonEmissionFromFuel(fuelType, fuelConsumed) {
   switch (fuelType) {
     case "Natural Gas":
@@ -73,6 +76,9 @@ export function CarbonEmissionFromFuel(fuelType, fuelConsumed) {
       return 0;
   }
 }
+
+// Returns the unit of measurement for a given carbon offset activity.
+// Used to display recommendations in the correct units (e.g., hectares, MWh).
 export function getUnit(offset) {
   switch (offset) {
     case "afforestation":
@@ -117,6 +123,8 @@ export function getUnit(offset) {
   }
 }
 
+// Randomly splits a value into n parts that sum up to the original value.
+// Used to distribute total emissions across different offset activities for recommendations.
 export function distributeValue(value, n) {
   if (n <= 0) {
     throw new Error("Number of parts must be greater than 0");
@@ -125,35 +133,44 @@ export function distributeValue(value, n) {
     return [value];
   }
 
-  // Generate n-1 random split points
+  // Generate n-1 random split points between 0 and 1, then sort them
   const splits = Array.from({ length: n - 1 }, () => Math.random()).sort(
     (a, b) => a - b
   );
 
-  // Calculate the differences between split points
+  // Calculate the differences between split points to get each part
   const parts = splits.map(
     (split, index) => (split - (splits[index - 1] || 0)) * value
   );
 
-  // Add the final part
+  // Add the final part (from last split to 1)
   parts.push((1 - splits[splits.length - 1]) * value);
 
   return parts;
 }
 
+// Provides personalized recommendations for reducing carbon footprint.
+// Distributes the total emission value across offset types and suggests how much of each activity to do.
 export function giveRecommendation(carbonEmission) {
   const parts = distributeValue(carbonEmission, 9);
   return offsets.map((offset, index) => {
     const part = parts[index];
     const factor = getCarbonMultiplier(offset);
+    // Suggests the amount of each offset activity needed to reduce the given part of emissions
     return `Reduce carbon footprint by doing ${(
       part.toFixed(2) / factor.toFixed(2)
     ).toFixed(2)} ${getUnit(offset)} of ${offset}.`;
   });
 }
+
+// Calculates carbon emissions from electricity consumption (in units).
+// Uses a fixed emission factor for electricity.
 export function CarbonEmissionFromElectricity(units) {
   return (units * 1.0035).toFixed(2);
 }
+
+// Returns the emission factor (kg CO2 per kg) for a given type of explosive.
+// Used for calculating emissions from mining explosives.
 export function getEmissionFactor(explosiveType) {
   // Log the explosive type to verify what is passed
   console.log("Explosive Type Received:", explosiveType);
@@ -184,6 +201,8 @@ export function getEmissionFactor(explosiveType) {
   }
 }
 
+// Returns the average carbon offset multiplier for a given activity type.
+// Used to convert offset activity units into equivalent CO2 reduction.
 function getCarbonMultiplier(activity) {
   switch (activity) {
     case "afforestation":
@@ -230,17 +249,19 @@ function getCarbonMultiplier(activity) {
   }
 }
 
+// Calculates the total carbon emissions for the user.
+// Sums up emissions from transportation and equipment, subtracts all offsets, and saves the result.
 export function totalCarbonEmission() {
-  // Retrieve and shorten variable names for emissions
+  // Retrieve and shorten variable names for emissions from localStorage
   var transElecEm = Number(localStorage.getItem("electricityEmissions")) || 0;
   var transFuelEm = Number(localStorage.getItem("fuelEmissions")) || 0;
   var excElecEm = Number(localStorage.getItem("electricityEmission")) || 0;
   var excFuelEm = Number(localStorage.getItem("fuelEmission")) || 0;
 
-  // Calculate the total emissions
+  // Calculate the total emissions from all sources
   var totalEmission = transElecEm + transFuelEm + excElecEm + excFuelEm;
 
-  // Retrieve the carbon offset values from localStorage and convert them to numbers
+  // Retrieve the carbon offset values from localStorage and convert them to CO2 equivalents
   var offsets = [
     "afforestation",
     "methaneCapture",
@@ -258,28 +279,31 @@ export function totalCarbonEmission() {
   ].map(
     (key) => (Number(localStorage.getItem(key)) || 0) * getCarbonMultiplier(key)
   );
-  const equipmentListJSON = localStorage.getItem("equipmentList");
 
-  // Check if the equipmentList exists and parse it
+  // Retrieve equipment emissions list from localStorage
+  const equipmentListJSON = localStorage.getItem("equipmentList");
   const equipmentList = equipmentListJSON ? JSON.parse(equipmentListJSON) : [];
-  // Iterate over the equipmentList array
+  // Add up emissions from each equipment item
   equipmentList.forEach((equipment) => {
     var emissionString = equipment.emissions;
     if (emissionString[0] === ".") emissionString = "0" + emissionString;
     var value = parseFloat(emissionString);
     totalEmission += value;
   });
+  // Convert to tons (if original units are kg)
   totalEmission /= 1000;
   // Subtract all offsets from the total emission
   totalEmission -= offsets.reduce((acc, val) => acc + val, 0);
 
   totalEmission = totalEmission.toFixed(5);
-  // Optional: return or log the final total emission
+  // Log and save the final total emission
   console.log("Total Carbon Emission:", totalEmission);
   addCarbonEmissionHistory(totalEmission, 0, 0);
   return totalEmission;
 }
 
+// Adds a new carbon emission history record to the user's Firestore document.
+// Stores the emission, money saved, credits earned, and user-specific lifestyle data.
 const addCarbonEmissionHistory = async (
   carbonEmission,
   moneySaved,
@@ -330,6 +354,8 @@ const addCarbonEmissionHistory = async (
   }
 };
 
+// Fetches all carbon emission history records for the user and sums their values.
+// Returns the total carbon emissions, money saved, and credits earned across all records.
 export const fetchAndSumCarbonEmissionHistory = async () => {
   try {
     // Get the currently authenticated user
@@ -377,7 +403,8 @@ export const fetchAndSumCarbonEmissionHistory = async () => {
   }
 };
 
-// Destructure the returned object into separate variables
+// Calls fetchAndSumCarbonEmissionHistory and logs the summed values.
+// Useful for debugging or displaying the user's total impact.
 export const getSummedValues = async () => {
   const { totalCarbonEmission, totalMoneySaved, totalCarbonCreditsEarned } =
     await fetchAndSumCarbonEmissionHistory();
