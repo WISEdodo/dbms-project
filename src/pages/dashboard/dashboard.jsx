@@ -3,7 +3,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import "./dashboard.css";
-import { fetchAndSumCarbonEmissionHistory } from "../../CarbonCalculator";
+import { fetchLatestCarbonEmissionHistory } from "../../CarbonCalculator";
 import { useLocation } from "react-router-dom";
 import Footer from "../../components/footer/footer"; // Ensure the path is correct
 
@@ -30,25 +30,22 @@ const Dashboard = () => {
           const userData = userProfileSnap.data();
           setUniqueEmail(userData.email || "");
         }
-        // Fetch latest carbon emission record
-        const latestRef = doc(
-          db,
-          "users",
-          userUid,
-          "carbonEmissionHistory",
-          "latestRecord"
-        );
-        const latestSnap = await getDoc(latestRef);
-        if (latestSnap.exists()) {
-          const data = latestSnap.data();
-          setDietType(data.dietType || "");
-          setWasteGeneration(data.wasteGeneration || "");
-          setRecycling(data.recycling || "");
-          setComposting(data.composting || "");
-          setGreenEnergy(data.greenEnergy || "");
+        // Fetch latest carbon emission record using the new function
+        const latestData = await fetchLatestCarbonEmissionHistory();
+        if (latestData) {
+          setDietType(latestData.dietType || "");
+          setWasteGeneration(latestData.wasteGeneration || "");
+          setRecycling(latestData.recycling || "");
+          setComposting(latestData.composting || "");
+          setGreenEnergy(latestData.greenEnergy || "");
+          setTotalCarbonEmission(latestData.carbonEmission || 0);
+        } else {
+          setTotalCarbonEmission(0);
         }
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching latest carbon data:", error);
+        setLoading(false);
       }
     };
 
@@ -58,20 +55,6 @@ const Dashboard = () => {
         fetchLatestCarbonData(currentUid);
       }
     });
-
-    const fetchData = async () => {
-      try {
-        const { totalCarbonEmission } =
-          await fetchAndSumCarbonEmissionHistory();
-        setTotalCarbonEmission(totalCarbonEmission || 0);
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
   }, [fallbackUid]);
 
   return (

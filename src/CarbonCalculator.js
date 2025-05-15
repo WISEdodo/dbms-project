@@ -19,7 +19,15 @@
 // }
 import { db } from "./firebase";
 import { getAuth } from "firebase/auth";
-import { doc, setDoc, collection, getDocs } from "firebase/firestore";
+import {
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+  query,
+  orderBy,
+  limit,
+} from "firebase/firestore";
 
 // List of supported carbon offset activities used for recommendations and calculations
 var offsets = [
@@ -333,17 +341,16 @@ const addCarbonEmissionHistory = async (
         // Add more fields as needed
       };
 
-      // Reference to the specific document in the 'carbonEmissionHistory' collection
-      const userRef = doc(
+      // Reference to the user's carbonEmissionHistory collection
+      const historyCollectionRef = collection(
         db,
         "users",
         userId,
-        "carbonEmissionHistory",
-        "latestRecord"
+        "carbonEmissionHistory"
       );
 
-      // Set the document (overwrites if it exists, or creates if it doesn't)
-      await setDoc(userRef, historyData);
+      // Add a new document with an auto-generated ID
+      await setDoc(doc(historyCollectionRef), historyData);
 
       console.log("Carbon emission history added successfully!");
     } else {
@@ -414,4 +421,41 @@ export const getSummedValues = async () => {
   console.log("Carbon Credits Earned:", totalCarbonCreditsEarned);
 
   // You can now use the three separate variables as needed
+};
+
+// Fetches the latest carbon emission history document for the user (for dashboard display)
+export const fetchLatestCarbonEmissionHistory = async () => {
+  try {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    if (user) {
+      const userId = user.uid;
+      // Reference to the user's carbonEmissionHistory collection
+      const carbonEmissionHistoryRef = collection(
+        db,
+        "users",
+        userId,
+        "carbonEmissionHistory"
+      );
+      // Query for the latest document (ordered by createdAt descending, limit 1)
+      const q = query(
+        carbonEmissionHistoryRef,
+        orderBy("createdAt", "desc"),
+        limit(1)
+      );
+      const querySnapshot = await getDocs(q);
+      if (!querySnapshot.empty) {
+        // Return the data from the latest document
+        return querySnapshot.docs[0].data();
+      } else {
+        return null; // No history found
+      }
+    } else {
+      console.log("No authenticated user found.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching latest carbon emission history:", error);
+    return null;
+  }
 };
