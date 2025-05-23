@@ -5,6 +5,7 @@
   margin: 1rem 0;
   border: 1px solid #333;
   width: 100%;
+  color: #fff;
 }
 
 .points-display {
@@ -99,11 +100,24 @@
   background-color: rgba(0, 200, 150, 0.1);
 }
 
-.gamification-loading {
-  text-align: center;
+.gamification-loading,
+.gamification-error {
   padding: 2rem;
-  color: #e0e0e0;
-  font-size: 1.2rem;
+  text-align: center;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.gamification-loading {
+  color: #4caf50;
+}
+
+.gamification-error {
+  color: #f44336;
+  background-color: rgba(244, 67, 54, 0.1);
+  border: 1px solid rgba(244, 67, 54, 0.3);
 }
 
 @media (max-width: 768px) {
@@ -118,4 +132,45 @@
   .challenge-card {
     padding: 1rem;
   }
+}
+
+.challenge-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.challenge-type {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.challenge-type.oneTime {
+  background-color: #4caf50;
+  color: white;
+}
+
+.challenge-type.monthly {
+  background-color: #2196f3;
+  color: white;
+}
+
+.challenge-type.weekly {
+  background-color: #ff9800;
+  color: white;
+}
+
+.completion-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+
+.completion-date {
+  font-size: 0.8rem;
+  color: #888;
 }

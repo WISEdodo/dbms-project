@@ -48,11 +48,14 @@ function SignUp() {
       );
       const user = userCredential.user;
 
-      // Save user details to Firestore
+      // Save user details to Firestore with initialized gamification fields
       await setDoc(doc(db, "users", user.uid), {
         companyName: formData.companyName,
         email: formData.email,
         contactNumber: formData.contactNumber,
+        points: 0, // Initialize points
+        completedChallenges: [], // Initialize completed challenges array
+        createdAt: new Date(), // Add timestamp for future reference
       });
 
       console.log("User signed up successfully:", user);
