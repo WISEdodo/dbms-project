@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { getAuth } from "firebase/auth";
-import PointsIndicator from "./PointsIndicator";
 import "./navbar.css";
 
 function Navbar() {
@@ -30,7 +29,13 @@ function Navbar() {
           </Link>
           {/* <Link to="/carbon" className="nav-link">Marketplace</Link> */}
           {/* <Link to="/result" className="nav-link">Result</Link> */}
-          {user && <PointsIndicator />}
+          {user && (
+            <>
+              <Link to="/challenges" className="nav-link">
+                Challenges
+              </Link>
+            </>
+          )}
           <Link to="/dashboard" className="nav-link">
             Profile
           </Link>{" "}

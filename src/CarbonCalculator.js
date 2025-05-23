@@ -260,54 +260,93 @@ function getCarbonMultiplier(activity) {
 // Calculates the total carbon emissions for the user.
 // Sums up emissions from transportation and equipment, subtracts all offsets, and saves the result.
 export function totalCarbonEmission() {
-  // Retrieve and shorten variable names for emissions from localStorage
-  var transElecEm = Number(localStorage.getItem("electricityEmissions")) || 0;
-  var transFuelEm = Number(localStorage.getItem("fuelEmissions")) || 0;
-  var excElecEm = Number(localStorage.getItem("electricityEmission")) || 0;
-  var excFuelEm = Number(localStorage.getItem("fuelEmission")) || 0;
+  try {
+    // Retrieve and validate emissions from localStorage
+    const getValidEmission = (key, defaultValue = 0) => {
+      const value = Number(localStorage.getItem(key));
+      return !isNaN(value) && value >= 0 ? value : defaultValue;
+    };
 
-  // Calculate the total emissions from all sources
-  var totalEmission = transElecEm + transFuelEm + excElecEm + excFuelEm;
+    // Get and validate all emission values
+    const transElecEm = getValidEmission("electricityEmissions");
+    const transFuelEm = getValidEmission("fuelEmissions");
+    const excElecEm = getValidEmission("electricityEmission");
+    const excFuelEm = getValidEmission("fuelEmission");
 
-  // Retrieve the carbon offset values from localStorage and convert them to CO2 equivalents
-  var offsets = [
-    "afforestation",
-    "methaneCapture",
-    "renewableEnergy",
-    "soilCarbon",
-    "ccs",
-    "beccs",
-    "carbonCredits",
-    "enhancedWeathering",
-    "biochar",
-    "renewableDiesel",
-    "avoidedDeforestation",
-    "oceanAlkalinity",
-    "wetlandsPeatlands",
-  ].map(
-    (key) => (Number(localStorage.getItem(key)) || 0) * getCarbonMultiplier(key)
-  );
+    // Calculate the total emissions from all sources
+    let totalEmission = transElecEm + transFuelEm + excElecEm + excFuelEm;
 
-  // Retrieve equipment emissions list from localStorage
-  const equipmentListJSON = localStorage.getItem("equipmentList");
-  const equipmentList = equipmentListJSON ? JSON.parse(equipmentListJSON) : [];
-  // Add up emissions from each equipment item
-  equipmentList.forEach((equipment) => {
-    var emissionString = equipment.emissions;
-    if (emissionString[0] === ".") emissionString = "0" + emissionString;
-    var value = parseFloat(emissionString);
-    totalEmission += value;
-  });
-  // Convert to tons (if original units are kg)
-  totalEmission /= 1000;
-  // Subtract all offsets from the total emission
-  totalEmission -= offsets.reduce((acc, val) => acc + val, 0);
+    // Validate and process equipment emissions
+    try {
+      const equipmentListJSON = localStorage.getItem("equipmentList");
+      if (equipmentListJSON) {
+        const equipmentList = JSON.parse(equipmentListJSON);
+        if (Array.isArray(equipmentList)) {
+          equipmentList.forEach((equipment) => {
+            if (equipment && typeof equipment.emissions === "string") {
+              let emissionString = equipment.emissions;
+              if (emissionString[0] === ".") {
+                emissionString = "0" + emissionString;
+              }
+              const value = parseFloat(emissionString);
+              if (!isNaN(value) && value >= 0) {
+                totalEmission += value;
+              } else {
+                console.warn("Invalid equipment emission value:", equipment);
+              }
+            }
+          });
+        }
+      }
+    } catch (error) {
+      console.error("Error processing equipment emissions:", error);
+    }
 
-  totalEmission = totalEmission.toFixed(5);
-  // Log and save the final total emission
-  console.log("Total Carbon Emission:", totalEmission);
-  addCarbonEmissionHistory(totalEmission, 0, 0);
-  return totalEmission;
+    // Process offsets with validation
+    const validOffsets = [
+      "afforestation",
+      "methaneCapture",
+      "renewableEnergy",
+      "soilCarbon",
+      "ccs",
+      "beccs",
+      "carbonCredits",
+      "enhancedWeathering",
+      "biochar",
+      "renewableDiesel",
+      "avoidedDeforestation",
+      "oceanAlkalinity",
+      "wetlandsPeatlands",
+    ];
+
+    const offsetValues = validOffsets.map((key) => {
+      const value = Number(localStorage.getItem(key)) || 0;
+      const multiplier = getCarbonMultiplier(key);
+      return !isNaN(value) && value >= 0 ? value * multiplier : 0;
+    });
+
+    // Convert to tons (if original units are kg) and validate
+    totalEmission = totalEmission / 1000;
+    if (isNaN(totalEmission) || totalEmission < 0) {
+      console.error("Invalid total emission calculated:", totalEmission);
+      totalEmission = 0;
+    }
+
+    // Subtract all offsets
+    const totalOffset = offsetValues.reduce((acc, val) => acc + val, 0);
+    totalEmission = Math.max(0, totalEmission - totalOffset);
+
+    // Format the result
+    const formattedEmission = Number(totalEmission.toFixed(5));
+
+    // Save to history
+    addCarbonEmissionHistory(formattedEmission, 0, 0);
+
+    return formattedEmission;
+  } catch (error) {
+    console.error("Error calculating total carbon emission:", error);
+    return 0;
+  }
 }
 
 // Adds a new carbon emission history record to the user's Firestore document.

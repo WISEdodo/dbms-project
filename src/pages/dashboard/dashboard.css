@@ -186,15 +186,76 @@ span {
   margin-bottom: 0.5rem;
 }
 
-/* Gamification box styles */
-.unique-box-gamification {
-  grid-column: span 3;
+/* Loading and Error States */
+.loading-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
   background-color: #1a1a1a;
-  padding: 0; /* Remove padding since the component has its own */
-  border-radius: 8px;
   border: 1px solid #333;
-  margin: 1rem 0;
-  overflow: hidden; /* Ensure rounded corners work with inner content */
+}
+
+.loading-box .loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #333;
+  border-top-color: #00c896;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.loading-box p {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+.error-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background-color: rgba(255, 0, 0, 0.1);
+  border: 1px solid rgba(255, 0, 0, 0.3);
+  padding: 2rem;
+  text-align: center;
+}
+
+.error-box h3 {
+  color: #ff4444;
+  margin: 0 0 1rem 0;
+  font-size: 1.4rem;
+}
+
+.error-box p {
+  color: #ff8888;
+  margin: 0 0 1.5rem 0;
+  font-size: 1.1rem;
+}
+
+.retry-button {
+  background-color: #00c896;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.retry-button:hover {
+  background-color: #00a67d;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* Responsive adjustments */
@@ -211,5 +272,24 @@ span {
   .IamYash {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .loading-box,
+  .error-box {
+    min-height: 150px;
+    padding: 1rem;
+  }
+
+  .error-box h3 {
+    font-size: 1.2rem;
+  }
+
+  .error-box p {
+    font-size: 1rem;
+  }
+
+  .retry-button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
   }
 }

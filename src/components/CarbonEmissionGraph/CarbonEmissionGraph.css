@@ -6,10 +6,57 @@
   padding: 1rem;
   margin: 1rem 0;
   border: 1px solid #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carbon-emission-graph.loading {
+  position: relative;
+}
+
+.carbon-emission-graph.loading::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #333;
+  border-top-color: #00c896;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+.carbon-emission-graph.error {
+  background-color: rgba(255, 0, 0, 0.1);
+  border-color: rgba(255, 0, 0, 0.3);
+}
+
+.error-message {
+  color: #ff4444;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.1rem;
+}
+
+.loading-spinner {
+  color: #e0e0e0;
+  font-size: 1.1rem;
+  margin-top: 3rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 768px) {
   .carbon-emission-graph {
     height: 300px;
+  }
+
+  .error-message,
+  .loading-spinner {
+    font-size: 1rem;
   }
 }
