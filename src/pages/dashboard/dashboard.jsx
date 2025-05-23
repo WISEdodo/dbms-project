@@ -5,7 +5,9 @@ import { db } from "../../firebase";
 import "./dashboard.css";
 import { fetchLatestCarbonEmissionHistory } from "../../CarbonCalculator";
 import { useLocation } from "react-router-dom";
-import Footer from "../../components/footer/footer"; // Ensure the path is correct
+import Footer from "../../components/footer/footer";
+import CarbonEmissionGraph from "../../components/CarbonEmissionGraph/CarbonEmissionGraph";
+import GamificationPoints from "../../components/Gamification/GamificationPoints";
 
 const Dashboard = () => {
   const [dietType, setDietType] = useState("");
@@ -97,13 +99,22 @@ const Dashboard = () => {
               </p>
             </div>
 
-            {/* New Suggestions Box */}
+            {/* Carbon Emission Graph */}
+            <div className="unique-box unique-box-graph">
+              <CarbonEmissionGraph />
+            </div>
+
+            {/* Gamification Points and Challenges */}
+            <div className="unique-box unique-box-gamification">
+              <GamificationPoints />
+            </div>
+
+            {/* Suggestions Box */}
             <div className="unique-box unique-box-suggestions">
               <div className="unique-h3">
                 Suggestions to Reduce Your Footprint
               </div>
               <ul>
-                {/* Suggestions will be dynamically inserted here */}
                 <li>Consider using public transport more often.</li>
                 <li>Explore plant-based meal options.</li>
                 <li>Improve home insulation to save energy.</li>

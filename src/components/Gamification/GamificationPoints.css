@@ -1,0 +1,121 @@
+.gamification-container {
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin: 1rem 0;
+  border: 1px solid #333;
+  width: 100%;
+}
+
+.points-display {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  border: 1px solid #444;
+}
+
+.points-display h2 {
+  color: #e0e0e0;
+  margin-bottom: 0.5rem;
+  font-size: 1.5rem;
+}
+
+.points-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #00c896;
+  text-shadow: 0 0 10px rgba(0, 200, 150, 0.3);
+}
+
+.challenges-section {
+  margin-top: 2rem;
+}
+
+.challenges-section h2 {
+  color: #e0e0e0;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.challenges-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.challenge-card {
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 1.5rem;
+  border: 1px solid #444;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.challenge-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.challenge-card h3 {
+  color: #e0e0e0;
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.challenge-card p {
+  color: #b0b0b0;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.challenge-points {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #444;
+}
+
+.challenge-points span {
+  color: #00c896;
+  font-weight: bold;
+}
+
+.completed-badge {
+  background-color: #00c896;
+  color: #fff !important;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.challenge-card.completed {
+  border-color: #00c896;
+  background-color: rgba(0, 200, 150, 0.1);
+}
+
+.gamification-loading {
+  text-align: center;
+  padding: 2rem;
+  color: #e0e0e0;
+  font-size: 1.2rem;
+}
+
+@media (max-width: 768px) {
+  .challenges-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .points-value {
+    font-size: 2rem;
+  }
+
+  .challenge-card {
+    padding: 1rem;
+  }
+}

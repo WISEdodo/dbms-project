@@ -17,7 +17,7 @@ html {
   align-items: center;
   justify-content: flex-start;
   min-height: 100vh;
-  padding-left: 2rem;
+  padding-left: 0.5rem;
   padding-right: 2rem;
   padding-bottom: 0;
 }
@@ -60,14 +60,7 @@ html {
   width: 100%;
   margin-bottom: 2rem;
 }
-.company-name {
-  background-color: white !important;
-  color: black !important;
-}
-.email {
-  background-color: white !important;
-  color: black !important;
-}
+
 .unique-input-box {
   flex: 1;
   margin: 0 0.5rem;
@@ -134,18 +127,27 @@ html {
   border-radius: 6px;
 }
 
-/* Graph container, centered and larger */
-.unique-img-graph {
-  grid-column: span 3; /* Make the graph span all 3 columns */
-  width: 100%;
-  height: 300px;
-  margin: 0 auto;
-  padding: 1rem;
-  background-color: #2a2a2a;
+/* Monthly Carbon Emission box */
+.unique-box1 {
+  grid-column: span 3;
+}
+
+/* Graph container styles */
+.unique-box-graph {
+  grid-column: span 3;
+  background-color: #1a1a1a;
+  padding: 1.5rem;
   border-radius: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border: 1px solid #333;
+  margin: 1rem 0;
+  height: auto;
+  min-height: 400px;
+}
+
+/* Suggestions box */
+.unique-box-suggestions {
+  grid-column: span 3;
+  margin-top: 1rem;
 }
 
 /* Symmetrical box border styles */
@@ -158,11 +160,6 @@ html {
   border: 1px solid #333;
 }
 
-/* Make Monthly Carbon Emission box span full width */
-.unique-box1 {
-  grid-column: span 3;
-}
-
 /* Slogan or description text */
 span {
   font-size: 1rem;
@@ -170,11 +167,6 @@ span {
 }
 
 /* Styles for the new suggestions box */
-.unique-box-suggestions {
-  grid-column: span 3; /* Make suggestions span all columns for now */
-  text-align: left;
-}
-
 .unique-box-suggestions .unique-h3 {
   margin-bottom: 1rem;
   color: #e0e0e0;
@@ -192,4 +184,32 @@ span {
   font-size: 1rem;
   color: #c0c0c0; /* Slightly lighter than main text for readability */
   margin-bottom: 0.5rem;
+}
+
+/* Gamification box styles */
+.unique-box-gamification {
+  grid-column: span 3;
+  background-color: #1a1a1a;
+  padding: 0; /* Remove padding since the component has its own */
+  border-radius: 8px;
+  border: 1px solid #333;
+  margin: 1rem 0;
+  overflow: hidden; /* Ensure rounded corners work with inner content */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .unique-input-container {
+    grid-template-columns: 1fr;
+  }
+
+  .unique-box-graph {
+    min-height: 300px;
+    padding: 1rem;
+  }
+
+  .IamYash {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
 }

@@ -1,0 +1,15 @@
+.carbon-emission-graph {
+  width: 100%;
+  height: 400px;
+  background-color: #1a1a1a;
+  border-radius: 8px;
+  padding: 1rem;
+  margin: 1rem 0;
+  border: 1px solid #333;
+}
+
+@media (max-width: 768px) {
+  .carbon-emission-graph {
+    height: 300px;
+  }
+}
