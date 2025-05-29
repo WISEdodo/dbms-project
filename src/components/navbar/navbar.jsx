@@ -29,13 +29,9 @@ function Navbar() {
           </Link>
           {/* <Link to="/carbon" className="nav-link">Marketplace</Link> */}
           {/* <Link to="/result" className="nav-link">Result</Link> */}
-          {user && (
-            <>
-              <Link to="/challenges" className="nav-link">
-                Challenges
-              </Link>
-            </>
-          )}
+          <Link to="/challenges" className="nav-link">
+            Challenges
+          </Link>
           <Link to="/dashboard" className="nav-link">
             Profile
           </Link>{" "}

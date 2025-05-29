@@ -16,7 +16,6 @@ const Dashboard = () => {
   const [greenEnergy, setGreenEnergy] = useState("");
   const [uniqueEmail, setUniqueEmail] = useState("");
   const [totalCarbonEmission, setTotalCarbonEmission] = useState(0);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
   const fallbackUid = location.state?.uid;
@@ -25,7 +24,6 @@ const Dashboard = () => {
     const auth = getAuth();
     const fetchLatestCarbonData = async (userUid) => {
       try {
-        setLoading(true);
         setError(null);
 
         // Fetch user email from profile
@@ -63,8 +61,6 @@ const Dashboard = () => {
       } catch (error) {
         console.error("Error fetching latest carbon data:", error);
         setError(error.message || "Failed to load dashboard data");
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -74,21 +70,11 @@ const Dashboard = () => {
         fetchLatestCarbonData(currentUid);
       } else {
         setError("No authenticated user found");
-        setLoading(false);
       }
     });
 
     return () => unsubscribe();
   }, [fallbackUid]);
-
-  const renderLoadingState = () => (
-    <div className="unique-dashboard-container">
-      <div className="unique-box loading-box">
-        <div className="loading-spinner"></div>
-        <p>Loading dashboard data...</p>
-      </div>
-    </div>
-  );
 
   const renderErrorState = () => (
     <div className="unique-dashboard-container">
@@ -111,9 +97,7 @@ const Dashboard = () => {
         <h1>Carbon Footprint Dashboard</h1>
       </header>
 
-      {loading ? (
-        renderLoadingState()
-      ) : error ? (
+      {error ? (
         renderErrorState()
       ) : (
         <>
